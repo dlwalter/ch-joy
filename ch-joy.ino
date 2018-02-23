@@ -23,22 +23,64 @@ byte b_row_pins_1[ROWS1] = {1};
 byte b_col_pins_1[COLS1] = {2, 6, 7, 8, 9, 11, 12, 14, 15, 13};
 Keypad joy_keypad_1 = Keypad(makeKeymap(b_circuit_1), b_row_pins_1, b_col_pins_1, ROWS1, COLS1);
 
+String msg;
 
 void setup() {
   Serial.begin(9600); // USB is always 12 Mbit/sec
 }
 
 void loop() {
-  char key0 = joy_keypad_0.getKey();
-  char key1 = joy_keypad_1.getKey();
-  
-  if (key0 != NO_KEY){
-    Serial.println(key0);      
-  }
-    if (key1 != NO_KEY){
-    Serial.println(key1);      
-  }
+  if (joy_keypad_0.getKeys())
+    {
+        for (int i=0; i<LIST_MAX; i++)   // Scan the whole key list.
+        {
+            if ( joy_keypad_0.key[i].stateChanged )   // Only find keys that have changed state.
+            {
+                switch (joy_keypad_0.key[i].kstate) {  // Report active key state : IDLE, PRESSED, HOLD, or RELEASED
+                    case PRESSED:
+                    msg = " PRESSED.";
+                break;
+                    case HOLD:
+                    msg = " HOLD.";
+                break;
+                    case RELEASED:
+                    msg = " RELEASED.";
+                break;
+                    case IDLE:
+                    msg = " IDLE.";
+                }
+                Serial.print("Key ");
+                Serial.print(joy_keypad_0.key[i].kchar);
+                Serial.println(msg);
+            }
+        }
+    }
 
+  if (joy_keypad_1.getKeys())
+    {
+        for (int i=0; i<LIST_MAX; i++)   // Scan the whole key list.
+        {
+            if ( joy_keypad_1.key[i].stateChanged )   // Only find keys that have changed state.
+            {
+                switch (joy_keypad_1.key[i].kstate) {  // Report active key state : IDLE, PRESSED, HOLD, or RELEASED
+                    case PRESSED:
+                    msg = " PRESSED.";
+                break;
+                    case HOLD:
+                    msg = " HOLD.";
+                break;
+                    case RELEASED:
+                    msg = " RELEASED.";
+                break;
+                    case IDLE:
+                    msg = " IDLE.";
+                }
+                Serial.print("Key ");
+                Serial.print(joy_keypad_1.key[i].kchar);
+                Serial.println(msg);
+            }
+        }
+    }
  
 }
 
