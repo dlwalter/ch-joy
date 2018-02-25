@@ -1,27 +1,28 @@
 
+//
+//  This variant is for the 8-wire version of the CH Combat Stick
+//
+
 #include <Bounce.h>
 #include <Keypad.h>
 
-const byte ROWS0 = 1;
-const byte COLS0 = 4;
-const byte OFFSET = 4;
+const byte ROWS = 4;
+const byte COLS = 4;
 
 bool key_val = false;
+char kcode = '';
 int key = 0;
 
 //Keypad 0 is Trigger (yellow), B3 (white), B5 (pink), B4 (purple/blk)
-char b_circuit_0[ROWS0][COLS0] = {{'T', '3', '5', '4'}};
-byte b_row_pins_0[ROWS0] = {0};
-byte b_col_pins_0[COLS0] = {3, 4, 5, 10};
+char b_circuit_0[ROWS0][COLS0] = {
+                                  {'R', 'D', 'L', 'U'},  //Coolie Hat
+                                  {'r', 'd', 'l', 'u'},  //Castle Hat
+                                  {'2', 'a', 'b', '4'},  //B2 and B4
+                                  {'3', '1', '5', 'T'},  //B3, B1, B5, T
+                                  };
+byte b_row_pins_0[ROWS0] = {0, 1, 2, 3};  //grey, purple, yellow, black
+byte b_col_pins_0[COLS0] = {4, 5, 6, 7};  //orange, white, green, red
 Keypad joy_keypad_0 = Keypad(makeKeymap(b_circuit_0), b_row_pins_0, b_col_pins_0, ROWS0, COLS0);
-
-//Keypad 1 is B1, Hat, Coolie, B2
-const byte ROWS1 = 1;
-const byte COLS1 = 10;
-char b_circuit_1[ROWS1][COLS1] = {{'1', '2', 'R', 'D', 'L', 'U', 'r', 'd', 'l', 'u'}};
-byte b_row_pins_1[ROWS1] = {1};
-byte b_col_pins_1[COLS1] = {2, 13, 6, 7, 8, 9, 11, 12, 14, 15};
-Keypad joy_keypad_1 = Keypad(makeKeymap(b_circuit_1), b_row_pins_1, b_col_pins_1, ROWS1, COLS1);
 
 String msg;
 
@@ -30,20 +31,20 @@ void setup() {
 }
 
 void loop() {
-  // Button 0: Trigger
-  // Button 1: Side Thumb
-  // Button 2: Pinky
-  // Button 3: Side Index
-  // Button 4: Thumb Low
-  // Button 5: Thumb High
-  // Button 6: Coolie R
-  // Button 7: Coolie D
-  // Button 8: Coolie L
-  // Button 9: Coolie U
-  // Button 10: Hat R
-  // Button 11: Hat D
-  // Button 12: Hat L
-  // Button 13: Hat U
+  // Button 1: Trigger
+  // Button 2: Side Thumb
+  // Button 3: Pinky
+  // Button 4: Side Index
+  // Button 5: Thumb Low
+  // Button 6: Thumb High
+  // Button 7: Coolie R
+  // Button 8: Coolie D
+  // Button 9: Coolie L
+  // Button 10: Coolie U
+  // Button 11: Hat R
+  // Button 12: Hat D
+  // Button 13: Hat L
+  // Button 14: Hat U
 
   if (joy_keypad_0.getKeys())
     {
@@ -53,25 +54,24 @@ void loop() {
             {
               // Set button to true if kstate is pressed or holding
               key_val = joy_keypad_0.key[i].kstate == PRESSED || joy_keypad_0.key[i].kstate == HOLD;
-              // increment key by 1 do to Joystick's 1 indexing
-              key = joy_keypad_0.key[i].kcode+1;
-              Joystick.button(key, key_val);
+              kcode = joy_keypad_0.key[i].kcode
+              switch (kcode){
+                case 'T': Joystick.button(1, key_val);
+                case '4': Joystick.button(2, key_val);
+                case '3': Joystick.button(3, key_val);
+                case '1': Joystick.button(4, key_val);
+                case '2': Joystick.button(5, key_val);
+                case '5': Joystick.button(6, key_val);
+                case 'R': Joystick.button(7, key_val);
+                case 'D': Joystick.button(8, key_val);
+                case 'L': Joystick.button(9, key_val);
+                case 'U': Joystick.button(10, key_val);
+                case 'r': Joystick.button(11, key_val);
+                case 'd': Joystick.button(12, key_val);
+                case 'l': Joystick.button(13, key_val);
+                case 'u': Joystick.button(14, key_val);
+              }
             }
-        }
-    }
-    
-  //Repeat for other button circuit
-  if (joy_keypad_1.getKeys())
-    {
-        for (int i=0; i<LIST_MAX; i++)   // Scan the whole key list.
-        {
-            if ( joy_keypad_1.key[i].stateChanged )   // Only find keys that have changed state.
-            {
-              key_val = joy_keypad_1.key[i].kstate == PRESSED || joy_keypad_1.key[i].kstate == HOLD;
-              key = joy_keypad_1.key[i].kcode+1+OFFSET;
-              Joystick.button(key, key_val);
-            }
-
         }
     }
 }
