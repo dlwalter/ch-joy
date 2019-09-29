@@ -8,7 +8,7 @@ Here is the finished build and my dog.
 
 ![Completed Build](https://raw.githubusercontent.com/dlwalter/ch-joy/master/images/finished.jpeg)
 
-Here gives a glimpse at the internals of the stick. 
+This gives a glimpse at the internals of the stick. 
 
 ![Layout](https://raw.githubusercontent.com/dlwalter/ch-joy/master/images/schematic.jpeg)
 
